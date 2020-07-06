@@ -42,9 +42,6 @@ export default class board{
       return gameWon;
 
     }
-    bestSpot() {
-        return this.emptySquares()[0];
-    }
-    
+
 
 }//class

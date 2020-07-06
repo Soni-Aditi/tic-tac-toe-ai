@@ -38,7 +38,7 @@ function startGame() {
 function turnClick(square) {
 	if (typeof initial_board.state[square.target.id] == 'number') {
 		turn(square.target.id, human.svar);
-		if (!checkTie(initial_board)) turn(initial_board.bestSpot(), ai.svar);
+		if (!checkTie(initial_board)) turn(ai.bestSpot(initial_board,ai.svar), ai.svar);
 	}
 }
 

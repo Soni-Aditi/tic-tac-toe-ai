@@ -17,9 +17,72 @@ getsvar(){
 //minimax
  //single player
  bestSpot(initial_board,player) {
-	return minimax(initial_board, player).index;
+	return this.minimax(initial_board, player).index;
 }
- bestScore(thatboard ,depth,isMaximizing){
+minimax(board,player,depth=0 , ismaximizing=true){
+    var empty_spots=board.emptySquares();
+    //bleh
+    if (empty_spots.length !==0){
+        if(player=='O' && board.winnercheck(player)){
+            return {score: -10+depth};}//pass only the character
+        else if(player=='X' && board.winnercheck(player)){
+            return {score: 10+depth};
+        }
+        
+    }
+    else{
+        return {score:0};//recheck
+    }
+
+    //heuristic vlues
+    //currently its maximizing
+    
+    var moves = [];
+	for (var i = 0; i < empty_spots.length; i++) {
+		var move = {};
+		move.index = board.state[empty_spots[i]];
+		board.state[empty_spots[i]]= player;
+
+		if (player == 'X') {
+			var result = this.minimax(board, 'O',depth+1,false);
+			move.score = result.score;
+		} else {
+			var result = this.minimax(board, 'X',depth+1,true);
+			move.score = result.score;
+		}
+
+		board.state[empty_spots[i]]= move.index;
+
+		moves.push(move);
+    }
+    
+
+
+
+    	var bestMove;
+	if(player === 'X') {
+		var bestScore = -10000;
+		for(var i = 0; i < moves.length; i++) {
+			if (moves[i].score > bestScore) {
+				bestScore = moves[i].score;
+				bestMove = i;
+			}
+		}
+	} else {
+		var bestScore = 10000;
+		for(var i = 0; i < moves.length; i++) {
+			if (moves[i].score < bestScore) {
+				bestScore = moves[i].score;
+				bestMove = i;
+			}
+		}
+	}
+
+	return moves[bestMove];
+}
+
+
+ /*bestScore(thatboard ,depth,isMaximizing){
      //heuristic val
     var spots=emptySquares();
     if(thatboard.winnercheck(this)){
@@ -62,7 +125,7 @@ getsvar(){
          }
 
 
-    
+    */
 
 
 
