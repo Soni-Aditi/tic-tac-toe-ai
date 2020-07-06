@@ -1,10 +1,10 @@
 import board from './board.mjs'
-import players from './Players.mjs'
+import Players from './players.mjs'
 var initial_board;
 var human;
 var ai;
-human=new players('O');
-ai=new players('X');
+human=new Players('O');
+ai=new Players('X');
 const winCombos = [
     [0, 1, 2],
     [3, 4, 5],
