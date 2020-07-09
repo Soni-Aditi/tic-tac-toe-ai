@@ -1,3 +1,7 @@
+body{
+	background-color: black;
+}
+
 td {
 	border:  2px solid #333;
 	height:  100px;
@@ -7,6 +11,7 @@ td {
 	font-family:  "Comic Sans MS", cursive, sans-serif;
 	font-size:  70px;
 	cursor: pointer;
+	color: azure;
 }
 
 table {
@@ -49,9 +54,73 @@ table tr td:last-child {
   font-size: 2em;
 }
 
+.cell:hover {
+	opacity: 0.7;
+  }
 
 
+  .selectSym{
+	display: none;
+	width: 220px;
+	top: 110px;
+	background-color: rgba(205, 133, 63, 0.8);
+	position: absolute;
+	left: 50%;
+	margin-left: -110px;
+	padding-top: 10px;
+	padding-bottom: 50px;
+	text-align: center;
+	border-radius: 5px;
+	color: yellow;
+	font-size: 2em; 
+  }
+  
+  .selectSym button{
+	font-family: "Comic Sans MS", cursive, sans-serif;
+	font-size:  50px;
+	width: 70px;
+  }
+  
+  .selectSym  button:first-of-type {
+	margin-right: 10px;
+  }
+  .selectSym  button:last-of-type {
+	margin-left: 10px;
+  }
+  .field {
+	margin-bottom: 30px;
+	left: 50%;
+  right:50%;
 
+	margin-left: 100px;
+  margin-right: 1052px;
+  
+	}
+.field ul {
+	  margin:0;
+	  padding: 0;
+	  list-style: none;
+	  border: 1px solid #8c8c8c;
+	  border-radius: 2px;
+	  overflow: hidden;
+	  font-size: 15px; }
+.field ul li {
+		float: left;
+		padding: 10px 15px;
+		border-right: 1px solid #8c8c8c;
+		cursor: pointer;
+		color: #8c8c8c; }
+.field ul li:hover {
+		  background-color: #b7b7b7;
+		  color: #fff; }
+.field ul li.active {
+		  background-color: #8c8c8c;
+		  color: #fff; }
 
-
-
+.field .starting_player_choices ul li {
+	  width: 50%;
+	  text-align: center; }
+.field label {
+	  font-weight: 600;
+	  margin-bottom: 15px;
+	  display: block; }

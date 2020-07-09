@@ -32,10 +32,32 @@
 	<div class="endgame">
         <div class="text"></div>
         
-
-    </div>
-    <button onClick="startGame()">Replay</button>
+		<button id="Replay" >Replay</button>
+	</div>
+<div class="container">
+	<div class="field">
+		<label>Depth</label>
+		<div class="depth_choices" id="depth">
+			<ul>
+				<li data-value="1">1</li>
+				<li data-value="2">2</li>
+				<li data-value="3">3</li>
+				<li data-value="4">4</li>
+				<li data-value="-1" class="active">Unlimited</li>
+			</ul>
+		</div>
+	</div>
+</div>
+	<div class = "selectSym">
+		<p>Select symbol:</p>
+		  <button id="sx">X</button>
+		  <button id="so">O</button>
+		</div>
 	
-  <script  src="o.js" type="module"></script>
+	<script  src="o.js" type="module"></script>
+		
+	<script  src="players.mjs" type="module"></script>
+	<script  src="board.mjs" type="module"></script>
+  
 </body>
 </html>
