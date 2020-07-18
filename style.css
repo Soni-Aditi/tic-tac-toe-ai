@@ -126,21 +126,17 @@ table tr td:last-child {
 	  margin-bottom: 15px;
 	  display: block; }
 
-.abc {
+	  .abc {
 		font-family: sans-serif;
 		display: grid;
 		height: 100vh;
-		margin-top:50px;
-		margin-left:500px;
 		place-items: left;
-		
-		
 	  }
 	  
 	  .base-timer {
 		position: relative;
-		width: 150px;
-		height: 150px;
+		width: 300px;
+		height: 300px;
 	  }
 	  
 	  .base-timer__svg {
@@ -180,15 +176,13 @@ table tr td:last-child {
 	  }
 	  
 	  .base-timer__label {
-		position: relative;
+		position: absolute;
 		width: 300px;
 		height: 300px;
-		margin-top:0px;
-		margin-left: 0px;
+		top: 0;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		font-size: 48px;
-		color: azure;
+		color: white;
 	  }
-	  

@@ -18,7 +18,7 @@ const winCombos = [
 //UNSTOPABLE timer going on after the first move
   //timer things
 
-  function hasClass(el, className) {
+  /*function hasClass(el, className) {
 	if (el.classList)
 	  return el.classList.contains(className);
 	else
@@ -49,11 +49,179 @@ const winCombos = [
 	addClass(event.target, 'active');
 	rdepth = event.target.dataset.value;
 	console.log(rdepth)
-}, false);
+}, false);*/
+
+
+
+
 const cells = document.querySelectorAll('.cell');
 //call start game
 startGame();
+/////timer
+const FULL_DASH_ARRAY = 283;
+const WARNING_THRESHOLD = 10;
+const ALERT_THRESHOLD = 5;
 
+const COLOR_CODES = {
+  info: {
+    color: "green"
+  },
+  warning: {
+    color: "orange",
+    threshold: WARNING_THRESHOLD
+  },
+  alert: {
+    color: "red",
+    threshold: ALERT_THRESHOLD
+  }
+};
+
+const TIME_LIMIT = 20;
+let timePassed = 0;
+let timeLeft = TIME_LIMIT;
+let timerInterval = null;
+let remainingPathColor = COLOR_CODES.info.color;
+
+
+
+
+document.getElementById("app").innerHTML = `
+<div class="base-timer">
+  <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <g class="base-timer__circle">
+      <circle class="base-timer__path-elapsed" cx="50" cy="50" r="45"></circle>
+      <path
+        id="base-timer-path-remaining"
+        stroke-dasharray="283"
+        class="base-timer__path-remaining ${remainingPathColor}"
+        d="
+          M 50, 50
+          m -45, 0
+          a 45,45 0 1,0 90,0
+          a 45,45 0 1,0 -90,0
+        "
+      ></path>
+    </g>
+  </svg>
+  <span id="base-timer-label" class="base-timer__label">${formatTime(
+    timeLeft
+  )}</span>
+</div>
+`;
+function time_up(){
+	for (var i = 0; i < cells.length; i++) {
+		cells[i].style.backgroundColor = "green";
+		cells[i].removeEventListener('click', turnClick, false);
+	}
+	document.querySelector(".endgame").style.display = "block";
+	document.querySelector(".endgame .text").innerText = "GAME OVER";
+}
+function resetTimer(){
+	console.log("adasdas");
+	timePassed=0;
+	 timeLeft = TIME_LIMIT;
+	timerInterval = null;
+	remainingPathColor = COLOR_CODES.info.color;
+}
+function stopTimer()
+{
+	clearInterval(timerInterval);
+	document.getElementById("app").style.display="none";
+}
+function onTimesUp() {
+	clearInterval(timerInterval);
+	resetTimer();
+	time_up();
+}
+
+function startTimer() {
+	document.getElementById("app").style.display="block";
+  timerInterval = setInterval(() => {
+    timePassed = timePassed += 1;
+	timeLeft = TIME_LIMIT - timePassed;
+	if (timeLeft <= 0) {
+		onTimesUp();
+	  }
+    document.getElementById("base-timer-label").innerHTML = formatTime(
+      timeLeft
+    );
+    setCircleDasharray();
+    setRemainingPathColor(timeLeft);
+
+
+  }, 1000);
+}
+
+function formatTime(time) {
+  const minutes = Math.floor(time / 60);
+  let seconds = time % 60;
+
+  if (seconds < 10) {
+    seconds = `0${seconds}`;
+  }
+
+  return `${minutes}:${seconds}`;
+}
+
+function setRemainingPathColor(timeLeft) {
+  const { alert, warning, info } = COLOR_CODES;
+  if (timeLeft <= alert.threshold) {
+    document
+      .getElementById("base-timer-path-remaining")
+      .classList.remove(warning.color);
+    document
+      .getElementById("base-timer-path-remaining")
+      .classList.add(alert.color);
+  } else if (timeLeft <= warning.threshold) {
+    document
+      .getElementById("base-timer-path-remaining")
+      .classList.remove(info.color);
+    document
+      .getElementById("base-timer-path-remaining")
+      .classList.add(warning.color);
+  }
+}
+
+function calculateTimeFraction() {
+  const rawTimeFraction = timeLeft / TIME_LIMIT;
+  return rawTimeFraction - (1 / TIME_LIMIT) * (1 - rawTimeFraction);
+}
+
+function setCircleDasharray() {
+  const circleDasharray = `${(
+    calculateTimeFraction() * FULL_DASH_ARRAY
+  ).toFixed(0)} 283`;
+  document
+    .getElementById("base-timer-path-remaining")
+    .setAttribute("stroke-dasharray", circleDasharray);
+}
+
+  function startGame() {
+	
+
+	document.querySelector('.endgame').style.display = "none";
+	document.querySelector('.endgame .text').innerText ="";
+	document.querySelector('.selectSym').style.display = "block";
+	for (let i = 0; i < cells.length; i++) {
+	  cells[i].innerText = '';
+	  cells[i].style.removeProperty('background-color');
+	}
+  }
+
+
+  function gameOver(gameWon) {
+	clearInterval(timerInterval);
+	resetTimer();
+	for (let index of winCombos[gameWon.index]) {
+		document.getElementById(index).style.backgroundColor =
+			gameWon.player == human.svar? "blue" : "red";
+	}
+	for (var i = 0; i < cells.length; i++) {
+		cells[i].removeEventListener('click', turnClick, false);
+	}
+	
+    declareWinner(gameWon.player == human.svar ? "You win!" : "You lose.");
+}
 function symo(){
 	
 	human=new Players('O');
@@ -179,25 +347,17 @@ function turn(squareId, player) {
 }
 
 
-
-
-function gameOver(gameWon) {
-	for (let index of winCombos[gameWon.index]) {
-		document.getElementById(index).style.backgroundColor =
-			gameWon.player == human.svar? "blue" : "red";
-	}
-	for (var i = 0; i < cells.length; i++) {
-		cells[i].removeEventListener('click', turnClick, false);
-	}
-    declareWinner(gameWon.player == human.svar ? "You win!" : "You lose.");
-}
 function declareWinner(who) {
+
 	document.querySelector(".endgame").style.display = "block";
 	document.querySelector(".endgame .text").innerText = who;
 }
 
+
 function checkTie(board) {
     if (board.emptySquares().length == 0) {
+		clearInterval(timerInterval);
+		resetTimer();
         for (var i = 0; i < cells.length; i++) {
             cells[i].style.backgroundColor = "green";
             cells[i].removeEventListener('click', turnClick, false);
@@ -207,139 +367,3 @@ function checkTie(board) {
     }
     return false;
 }
-/////timer
-const FULL_DASH_ARRAY = 283;
-const WARNING_THRESHOLD = 10;
-const ALERT_THRESHOLD = 5;
-
-const COLOR_CODES = {
-  info: {
-    color: "green"
-  },
-  warning: {
-    color: "orange",
-    threshold: WARNING_THRESHOLD
-  },
-  alert: {
-    color: "red",
-    threshold: ALERT_THRESHOLD
-  }
-};
-
-const TIME_LIMIT = 20;
-let timePassed = 0;
-let timeLeft = TIME_LIMIT;
-let timerInterval = null;
-let remainingPathColor = COLOR_CODES.info.color;
-
-document.getElementById("app").innerHTML = `
-<div class="base-timer">
-  <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <g class="base-timer__circle">
-      <circle class="base-timer__path-elapsed" cx="50" cy="50" r="45"></circle>
-      <path
-        id="base-timer-path-remaining"
-        stroke-dasharray="283"
-        class="base-timer__path-remaining ${remainingPathColor}"
-        d="
-          M 50, 50
-          m -45, 0
-          a 45,45 0 1,0 90,0
-          a 45,45 0 1,0 -90,0
-        "
-      ></path>
-    </g>
-  </svg>
-  <span id="base-timer-label" class="base-timer__label">${formatTime(
-    timeLeft
-  )}</span>
-</div>
-`;
-
-function resetTimer(){
-	 timeLeft = TIME_LIMIT;
-	timerInterval = null;
-	remainingPathColor = COLOR_CODES.info.color;
-}
-function stopTimer()
-{
-	clearInterval(timerInterval);
-	document.getElementById("app").style.display="none";
-}
-function onTimesUp() {
-	clearInterval(timerInterval);
-}
-
-function startTimer() {
-	document.getElementById("app").style.display="block";
-  timerInterval = setInterval(() => {
-    timePassed = timePassed += 1;
-	timeLeft = TIME_LIMIT - timePassed;
-	if (timeLeft <= 0) {
-		onTimesUp();
-	  }
-    document.getElementById("base-timer-label").innerHTML = formatTime(
-      timeLeft
-    );
-    setCircleDasharray();
-    setRemainingPathColor(timeLeft);
-
-
-  }, 1000);
-}
-
-function formatTime(time) {
-  const minutes = Math.floor(time / 60);
-  let seconds = time % 60;
-
-  if (seconds < 10) {
-    seconds = `0${seconds}`;
-  }
-
-  return `${minutes}:${seconds}`;
-}
-
-function setRemainingPathColor(timeLeft) {
-  const { alert, warning, info } = COLOR_CODES;
-  if (timeLeft <= alert.threshold) {
-    document
-      .getElementById("base-timer-path-remaining")
-      .classList.remove(warning.color);
-    document
-      .getElementById("base-timer-path-remaining")
-      .classList.add(alert.color);
-  } else if (timeLeft <= warning.threshold) {
-    document
-      .getElementById("base-timer-path-remaining")
-      .classList.remove(info.color);
-    document
-      .getElementById("base-timer-path-remaining")
-      .classList.add(warning.color);
-  }
-}
-
-function calculateTimeFraction() {
-  const rawTimeFraction = timeLeft / TIME_LIMIT;
-  return rawTimeFraction - (1 / TIME_LIMIT) * (1 - rawTimeFraction);
-}
-
-function setCircleDasharray() {
-  const circleDasharray = `${(
-    calculateTimeFraction() * FULL_DASH_ARRAY
-  ).toFixed(0)} 283`;
-  document
-    .getElementById("base-timer-path-remaining")
-    .setAttribute("stroke-dasharray", circleDasharray);
-}
-
-  function startGame() {
-	
-
-	document.querySelector('.endgame').style.display = "none";
-	document.querySelector('.endgame .text').innerText ="";
-	document.querySelector('.selectSym').style.display = "block";
-	for (let i = 0; i < cells.length; i++) {
-	  cells[i].innerText = '';
-	  cells[i].style.removeProperty('background-color');
-	}
-  }
