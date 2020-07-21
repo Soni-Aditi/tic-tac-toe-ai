@@ -117,7 +117,7 @@ function time_up(){
 	document.querySelector(".endgame .text").innerText = "GAME OVER";
 }
 function resetTimer(){
-	console.log("adasdas");
+	
 	timePassed=0;
 	 timeLeft = TIME_LIMIT;
 	timerInterval = null;
@@ -272,12 +272,13 @@ function bestSpot(player) {
 		return minimax(initial_board, ai.svar).index;
 	}
 	else if (player==human.svar){
-		return minimax(initial_board, human.svar).index;
+		return minimax(initial_board,-Infinity,-Infinity, human.svar).index;
 	}
 }
-function minimax(initial_board, player,depth=0) {
-	var availSpots = initial_board.emptySquares();
 
+function minimax(initial_board, player,alpha,beta,depth=0) {
+	var availSpots = initial_board.emptySquares();
+	
 	if (initial_board.checkWin( human.svar)||depth==rdepth) {
 		return {score: -10};
 	} else if (initial_board.checkWin( ai.svar) || depth==rdepth) {
@@ -306,19 +307,27 @@ function minimax(initial_board, player,depth=0) {
 
 	var bestMove;
 	if(player === ai.svar) {
-		var bestScore = -10000;
+		var bestScore = -Infinity;
 		for(var i = 0; i < moves.length; i++) {
 			if (moves[i].score > bestScore) {
 				bestScore = moves[i].score;
 				bestMove = i;
 			}
+			alpha=Math.max(alpha,bestScore);
+			if(beta<=alpha){
+				break;
+			}
 		}
 	} else {
-		var bestScore = 10000;
+		var bestScore = Infinity;
 		for(var i = 0; i < moves.length; i++) {
 			if (moves[i].score < bestScore) {
 				bestScore = moves[i].score;
 				bestMove = i;
+			}
+			beta=Math.min(beta,bestScore);
+			if(beta<=alpha){
+				break;
 			}
 		}
 	}
