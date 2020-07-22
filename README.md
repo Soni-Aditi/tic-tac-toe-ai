@@ -13,7 +13,7 @@ DEMO RUNNING AT :-  https://evernox696.github.io/tic-tac-toe-ai/
 
 ## Built With
 
-* JavaScript(Node.js, EP6 Modules)
+* JavaScript(Node.js, ES6 Modules)
 * HTML5
 * CSS
 
