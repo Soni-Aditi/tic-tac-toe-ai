@@ -1,6 +1,5 @@
 
-# Project Title
-## A TIC TAC TOE
+# *A TIC TAC TOE GAME*
 A Tic Tac Toe game, where the AI is as smart as human.
 
 ### Prerequisites
