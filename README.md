@@ -4,13 +4,13 @@
 A Tic Tac Toe game, where the AI is as smart as human.
 
 ### Prerequisites
-A text editor ( Example :- Atom ,VSCode etc)
-Node.js
+* A text editor ( Example :- Atom ,VSCode etc)
+* Node.js insalled [DOWNLOAD AT] https://nodejs.org/en/
 
 
 ## Deployment
 
-DEMO RUNNING AT :-
+DEMO RUNNING AT :-  https://evernox696.github.io/tic-tac-toe-ai/
 
 ## Built With
 
