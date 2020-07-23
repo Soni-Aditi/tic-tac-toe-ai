@@ -5,6 +5,7 @@ var human;
 var ai;
 var rdepth;
 var maxdepth =-1;
+var human_choice;
 const winCombos = [
     [0, 1, 2],
     [3, 4, 5],
@@ -42,7 +43,7 @@ const COLOR_CODES = {
   }
 };
 
-const TIME_LIMIT = 20;
+const TIME_LIMIT = 7;
 let timePassed = 0;
 let timeLeft = TIME_LIMIT;
 let timerInterval = null;
@@ -75,6 +76,7 @@ document.getElementById("app").innerHTML = `
 </div>
 `;
 function time_up(){
+	document.getElementById("s_move").style.display="none";
 	for (var i = 0; i < cells.length; i++) {
 		cells[i].style.backgroundColor = "green";
 		cells[i].removeEventListener('click', turnClick, false);
@@ -92,6 +94,7 @@ function resetTimer(){
 function stopTimer()
 {
 	clearInterval(timerInterval);
+	resetTimer();
 	document.getElementById("app").style.display="none";
 }
 function onTimesUp() {
@@ -101,7 +104,9 @@ function onTimesUp() {
 }
 
 function startTimer() {
+	document.getElementById("s_move").style.display = "none";
 	document.getElementById("app").style.display="block";
+	
   timerInterval = setInterval(() => {
     timePassed = timePassed += 1;
 	timeLeft = TIME_LIMIT - timePassed;
@@ -163,7 +168,7 @@ function setCircleDasharray() {
 }
 	//MAIN  FUNCtion of the game
   function startGame() {
-	
+	document.getElementById("s_move").style.display="none";
 
 	document.querySelector('.endgame').style.display = "none";
 	document.querySelector('.endgame .text').innerText ="";
@@ -176,6 +181,7 @@ function setCircleDasharray() {
 
 
   function gameOver(gameWon) {
+	document.getElementById("s_move").style.display="none";
 	clearInterval(timerInterval);
 	resetTimer();
 	for (let index of winCombos[gameWon.index]) {
@@ -231,23 +237,36 @@ document.getElementById("Replay").addEventListener('click', startGame);
 
 
 function turnClick(square) {
+	document.getElementById("s_move").style.display="none";
 	if (typeof initial_board.state[square.target.id] == 'number') {
+		
+		stopTimer();
+		//document.getElementById("s_move").style.display = "none";
 		turn(square.target.id, human.svar);
-		if (!initial_board.checkWin(human.svar) &&!checkTie(initial_board)) turn(bestSpot(ai.svar), ai.svar);
+		if (!initial_board.checkWin(human.svar) &&!checkTie(initial_board)) {
+			turn(bestSpot(ai.svar), ai.svar);
+			document.getElementById("s_move").style.display = "block";
+			document.getElementById("s_move").innerHTML=`<p class="pc" id="oho" >Hooman you better move to <span id="suggest_move_label" class="suggest-move_lable" style="color:blue"> ${human_choice}</span> block if you wanna win </p> `;
+			human_choice=bestSpot(human.svar); 
+			human_choice=human_choice+1;
+			document.getElementById("suggest_move_label").innerHTML =human_choice;
+			//sugest move
+
+		}
 	}
 }
 //to call the minimax
 function bestSpot(player) {
 	if (player==ai.svar)
 	{
-		return minimax(initial_board, ai.svar).index;
+		return minimax(initial_board,ai.svar).index;
 	}
 	else if (player==human.svar){
-		return minimax(initial_board,-Infinity,-Infinity, human.svar).index;
+		return minimax(initial_board, human.svar).index;
 	}
 }
 //MINIMAX WITH ALPHA BETHA PRUNING
-function minimax(initial_board, player,alpha,beta,depth=0) {
+function minimax(initial_board, player,depth=0) {
 	var availSpots = initial_board.emptySquares();
 	
 	if (initial_board.checkWin( human.svar)||depth==rdepth) {
@@ -284,10 +303,7 @@ function minimax(initial_board, player,alpha,beta,depth=0) {
 				bestScore = moves[i].score;
 				bestMove = i;
 			}
-			alpha=Math.max(alpha,bestScore);
-			if(beta<=alpha){
-				break;
-			}
+
 		}
 	} else {
 		var bestScore = Infinity;
@@ -296,10 +312,7 @@ function minimax(initial_board, player,alpha,beta,depth=0) {
 				bestScore = moves[i].score;
 				bestMove = i;
 			}
-			beta=Math.min(beta,bestScore);
-			if(beta<=alpha){
-				break;
-			}
+
 		}
 	}
 
@@ -316,7 +329,8 @@ function turn(squareId, player) {
 	document.getElementById(squareId).innerText = player;
 	let gameWon =initial_board.checkWin(player);
 	//comment
-	if (gameWon) gameOver(gameWon)
+	if (gameWon) {document.getElementById("s_move").style.display="none";
+		gameOver(gameWon)}
 	else if(player==ai.svar){
 		startTimer();
 	}
@@ -328,7 +342,7 @@ function turn(squareId, player) {
 
 
 function declareWinner(who) {
-
+	document.getElementById("s_move").style.display="none";
 	document.querySelector(".endgame").style.display = "block";
 	document.querySelector(".endgame .text").innerText = who;
 }
@@ -336,6 +350,7 @@ function declareWinner(who) {
 
 function checkTie(board) {
     if (board.emptySquares().length == 0) {
+		document.getElementById("s_move").style.display="none";
 		clearInterval(timerInterval);
 		resetTimer();
         for (var i = 0; i < cells.length; i++) {

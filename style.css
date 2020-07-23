@@ -124,6 +124,7 @@ table tr td:last-child {
 .field label {
 	  font-weight: 600;
 	  margin-bottom: 15px;
+	  font-family:  "Comic Sans MS", cursive, sans-serif;
 	  display: block; }
 
 	  .abc {
@@ -183,6 +184,18 @@ table tr td:last-child {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 48px;
+		font-size: 44px;
+		font-family:  "Comic Sans MS", cursive, sans-serif;
 		color: white;
+	  }
+	  .pc {
+		position: absolute;
+		width:500px;
+		height: 50px;
+		font-size: 30px;
+		font-family:  "Comic Sans MS", cursive, sans-serif;
+		color: white;
+		left: 50%;
+		margin-left:-155px;
+		top:500px;
 	  }
