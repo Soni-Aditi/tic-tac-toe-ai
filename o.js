@@ -15,45 +15,11 @@ const winCombos = [
     [0, 4, 8],
     [6, 4, 2]
   ]
-//UNSTOPABLE timer going on after the first move
-  //timer things
-
-  /*function hasClass(el, className) {
-	if (el.classList)
-	  return el.classList.contains(className);
-	else
-	  return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
-  }
-
-  function addClass(el, className) {
-	if (el.classList)
-	  el.classList.add(className);
-	else if (!hasClass(el, className)) el.className += " " + className;
-  }
-  function removeClass(el, className) {
-	if (el.classList)
-	  el.classList.remove(className);
-	else if (hasClass(el, className)) {
-	  var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
-	  el.className=el.className.replace(reg, ' ');
-	}
-  }
-  document.getElementById("newGame").addEventListener("click", startGame);
-
-  document.getElementById("depth").addEventListener("click", (event) => {
-	if(event.target.tagName !== "LI" || hasClass(event.target, 'active')) return
-	let depth_choices = [...document.getElementById("depth").children[0].children];
-	depth_choices.forEach((choice) => {
-		removeClass(choice, 'active');
-	});
-	addClass(event.target, 'active');
-	rdepth = event.target.dataset.value;
-	console.log(rdepth)
-}, false);*/
 
 
 
 
+//event handler cells
 const cells = document.querySelectorAll('.cell');
 //call start game
 startGame();
@@ -84,7 +50,7 @@ let remainingPathColor = COLOR_CODES.info.color;
 
 
 
-
+//event handler :timer
 document.getElementById("app").innerHTML = `
 <div class="base-timer">
   <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -151,7 +117,7 @@ function startTimer() {
 
   }, 1000);
 }
-
+//second conversion
 function formatTime(time) {
   const minutes = Math.floor(time / 60);
   let seconds = time % 60;
@@ -162,7 +128,7 @@ function formatTime(time) {
 
   return `${minutes}:${seconds}`;
 }
-
+//
 function setRemainingPathColor(timeLeft) {
   const { alert, warning, info } = COLOR_CODES;
   if (timeLeft <= alert.threshold) {
@@ -195,7 +161,7 @@ function setCircleDasharray() {
     .getElementById("base-timer-path-remaining")
     .setAttribute("stroke-dasharray", circleDasharray);
 }
-
+	//MAIN  FUNCtion of the game
   function startGame() {
 	
 
@@ -222,6 +188,7 @@ function setCircleDasharray() {
 	
     declareWinner(gameWon.player == human.svar ? "You win!" : "You lose.");
 }
+//if user selects O
 function symo(){
 	
 	human=new Players('O');
@@ -237,8 +204,9 @@ function symo(){
 	
 	document.querySelector('.selectSym').style.display = "none";
   }
+  //button event handler
   document.getElementById("so").addEventListener('click', symo);
-
+//if user selects X
   function symx(){
 	
 	human=new Players('X');
@@ -254,18 +222,21 @@ function symo(){
 	
 	document.querySelector('.selectSym').style.display = "none";
   }
+//button event handler
   document.getElementById("sx").addEventListener('click', symx);
+//replay button event handler
+
 
 document.getElementById("Replay").addEventListener('click', startGame);
-//document.querySelector('').
+
+
 function turnClick(square) {
 	if (typeof initial_board.state[square.target.id] == 'number') {
 		turn(square.target.id, human.svar);
 		if (!initial_board.checkWin(human.svar) &&!checkTie(initial_board)) turn(bestSpot(ai.svar), ai.svar);
 	}
 }
-////////////////MIGHT DELETE LATER
-
+//to call the minimax
 function bestSpot(player) {
 	if (player==ai.svar)
 	{
@@ -275,7 +246,7 @@ function bestSpot(player) {
 		return minimax(initial_board,-Infinity,-Infinity, human.svar).index;
 	}
 }
-
+//MINIMAX WITH ALPHA BETHA PRUNING
 function minimax(initial_board, player,alpha,beta,depth=0) {
 	var availSpots = initial_board.emptySquares();
 	
