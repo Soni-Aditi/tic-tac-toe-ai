@@ -2,14 +2,13 @@
 # *A TIC TAC TOE GAME*
 
 A Tic Tac Toe game, where the AI is as smart as human.
-* You have got 7seconds for each move but to help you out the AI tells you the best possible move itself.
-
-
-
 ## DEMO RUNNING AT :-  https://evernox696.github.io/tic-tac-toe-ai/
 
 ### Prerequisites
 * Node.js insalled [DOWNLOAD AT] https://nodejs.org/en/
+
+
+## Deployment
 
 
 ## Built With
@@ -20,7 +19,7 @@ A Tic Tac Toe game, where the AI is as smart as human.
 
 ## Authors
 
-*Aditi Soni*  - [EVERNOX696](https://github.com/EVERNOX696)
+* **Aditi Soni **  - [EVERNOX696](https://github.com/EVERNOX696)
 
 ## Acknowledgments
 
